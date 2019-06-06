@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace ExcelImageExport.Validation
 {
-    public class MainViewValidator : AbstractValidator<IMainView>
+    public class DownloadImagesValidator : AbstractValidator<IDownloadImages>
     {
-        public MainViewValidator()
+        public DownloadImagesValidator()
         {
             RuleFor(z => z.StartRowIndex).NotNull().NotEqual(0);
             RuleFor(z => z.NamesColumnIndex).NotNull().NotEqual(0);

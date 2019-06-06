@@ -88,6 +88,7 @@
     <Compile Include="DryIoc\FastExpressionCompiler.cs" />
     <Compile Include="DryIoc\ImTools.cs" />
     <Compile Include="Features\DryIocAdapter.cs" />
+    <Compile Include="Features\EnumHelper.cs" />
     <Compile Include="Features\ExtensionMethods.cs" />
     <Compile Include="Presenter\Common\ApplicationController.cs" />
     <Compile Include="Presenter\Common\BasePresenter.cs" />
@@ -96,7 +97,16 @@
     <Compile Include="Presenter\Common\IPresenter.cs" />
     <Compile Include="Presenter\Common\IView.cs" />
     <Compile Include="Presenter\MainPresenter.cs" />
-    <Compile Include="Validation\MainViewValidator.cs" />
+    <Compile Include="Services\DownloadImageService.cs" />
+    <Compile Include="Services\Models\FileData.cs" />
+    <Compile Include="Services\Models\ProductsList.cs" />
+    <Compile Include="Services\Models\ReportData.cs" />
+    <Compile Include="Services\Models\ReportProgressStep.cs" />
+    <Compile Include="Services\Models\SkuList.cs" />
+    <Compile Include="Services\Models\SkuProgressStep.cs" />
+    <Compile Include="Services\SkuUpdaterService.cs" />
+    <Compile Include="Validation\DownloadImagesValidator.cs" />
+    <Compile Include="Validation\SkuUpdaterValidator.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>
