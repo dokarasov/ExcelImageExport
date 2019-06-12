@@ -124,21 +124,24 @@ namespace ExcelImageExport.Services
             _skuUpdater.SkuCancellationTokenSource.Token.ThrowIfCancellationRequested();
             _skuUpdater.SkuProgress(SkuProgressStep.UpdateProductsFile);
 
-            var file = File.ReadAllBytes(_skuUpdater.ProductsFilePath);
-            using (var memoryStream = new MemoryStream(file))
-            {
-                var workbook = new XSSFWorkbook(memoryStream);
-                var worksheet = workbook.GetSheetAt(0);
+            XSSFWorkbook workbook;
+            using (var fileStream = new FileStream(_skuUpdater.ProductsFilePath, FileMode.Open, FileAccess.Read))
+                workbook = new XSSFWorkbook(fileStream);
+            var worksheet = workbook.GetSheetAt(0);
 
-                const int priceColumnIndex = 16;
-                const int quantityColumnIndex = 11;
-                foreach (var product in productsList.List.Where(z => z.Updated))
-                {
-                    var row = worksheet.GetRow(product.Index);
-                    row.GetCell(priceColumnIndex).SetCellValue(product.Price);
-                    row.GetCell(quantityColumnIndex).SetCellValue(product.Quantity);
-                }
+            const int priceColumnIndex = 16;
+            const int quantityColumnIndex = 11;
+            foreach (var product in productsList.List.Where(z => z.Updated))
+            {
+                var row = worksheet.GetRow(product.Index);
+                row.GetCell(priceColumnIndex).SetCellValue(product.Price);
+                row.GetCell(quantityColumnIndex).SetCellValue(product.Quantity);
             }
+
+            using (var fileStream = new FileStream(_skuUpdater.ProductsFilePath, FileMode.Create, FileAccess.Write))
+                workbook.Write(fileStream);
+
+            workbook.Close();
         }
 
         public void UpdateSkuFile(SkuList skuList)
