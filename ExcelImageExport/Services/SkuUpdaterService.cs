@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ExcelImageExport.Features;
 using ExcelImageExport.Services.Models;
 using ExcelImageExport.Views;
 using NPOI.XSSF.UserModel;
@@ -40,14 +41,19 @@ namespace ExcelImageExport.Services
                     {
                         list.Add(new SkuItem
                         {
-                            Sku = row.GetCell(skuColumnIndex).StringCellValue,
-                            Price = row.GetCell(priceColumnIndex).NumericCellValue,
-                            Quantity = Convert.ToInt32(row.GetCell(quantityColumnIndex).NumericCellValue)
+                            Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
+                            Price = double.Parse(row.GetCell(priceColumnIndex).GetFormattedCellValue()),
+                            Quantity = int.Parse(row.GetCell(quantityColumnIndex).GetFormattedCellValue())
                         });
                     }
                     catch (Exception ex)
                     {
-                        Log.Fatal(ex, "There is some error reading cell values.");
+                        Log.Fatal(ex,
+                            "There is some error reading cell values. Row: " +
+                            $"1. {row.GetCell(skuColumnIndex)}, " +
+                            $"2. {row.GetCell(priceColumnIndex)}, " +
+                            $"3. {row.GetCell(quantityColumnIndex)}");
+                        throw;
                     }
                 }
 
@@ -80,14 +86,19 @@ namespace ExcelImageExport.Services
                         list.Add(new ProductItem
                         {
                             Index = rowIndex,
-                            Sku = row.GetCell(skuColumnIndex).StringCellValue,
-                            Price = row.GetCell(priceColumnIndex).NumericCellValue,
-                            Quantity = Convert.ToInt32(row.GetCell(quantityColumnIndex).NumericCellValue)
+                            Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
+                            Price = double.Parse(row.GetCell(priceColumnIndex).GetFormattedCellValue()),
+                            Quantity = int.Parse(row.GetCell(quantityColumnIndex).GetFormattedCellValue())
                         });
                     }
                     catch (Exception ex)
                     {
-                        Log.Fatal(ex, "There is some error reading cell values.");
+                        Log.Fatal(ex,
+                            "There is some error reading cell values. Row: " +
+                            $"1. {row.GetCell(skuColumnIndex)}, " +
+                            $"2. {row.GetCell(priceColumnIndex)}, " +
+                            $"3. {row.GetCell(quantityColumnIndex)}");
+                        throw;
                     }
                 }
 

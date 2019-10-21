@@ -90,6 +90,7 @@
     <Compile Include="Features\DryIocAdapter.cs" />
     <Compile Include="Features\EnumHelper.cs" />
     <Compile Include="Features\ExtensionMethods.cs" />
+    <Compile Include="Features\NpoiExtensions.cs" />
     <Compile Include="Presenter\Common\ApplicationController.cs" />
     <Compile Include="Presenter\Common\BasePresenter.cs" />
     <Compile Include="Presenter\Common\IApplicationController.cs" />
