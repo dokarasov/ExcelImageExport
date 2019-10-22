@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using ExcelImageExport.Features;
@@ -42,7 +43,9 @@ namespace ExcelImageExport.Services
                         list.Add(new SkuItem
                         {
                             Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
-                            Price = double.Parse(row.GetCell(priceColumnIndex).GetFormattedCellValue()),
+                            Price = double.Parse(
+                                row.GetCell(priceColumnIndex).GetFormattedCellValue().Replace(",", "."),
+                                CultureInfo.InvariantCulture),
                             Quantity = int.Parse(row.GetCell(quantityColumnIndex).GetFormattedCellValue())
                         });
                     }
@@ -87,7 +90,9 @@ namespace ExcelImageExport.Services
                         {
                             Index = rowIndex,
                             Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
-                            Price = double.Parse(row.GetCell(priceColumnIndex).GetFormattedCellValue()),
+                            Price = double.Parse(
+                                row.GetCell(priceColumnIndex).GetFormattedCellValue().Replace(",", "."),
+                                CultureInfo.InvariantCulture),
                             Quantity = int.Parse(row.GetCell(quantityColumnIndex).GetFormattedCellValue())
                         });
                     }
