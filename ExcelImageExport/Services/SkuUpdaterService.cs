@@ -120,16 +120,19 @@ namespace ExcelImageExport.Services
 
             foreach (var skuItem in skuList.List)
             {
-                var product = productsList.List.FirstOrDefault(z => z.Sku == skuItem.Sku);
-                if (product == null)
+                var anyProduct = productsList.List.Any(z => z.Sku == skuItem.Sku);
+                if (!anyProduct)
                 {
                     skuItem.Unused = true;
                     continue;
                 }
 
-                product.Price = skuItem.Price;
-                product.Quantity = skuItem.Quantity;
-                product.Updated = true;
+                foreach (var product in productsList.List.Where(z => z.Sku == skuItem.Sku))
+                {
+                    product.Price = skuItem.Price;
+                    product.Quantity = skuItem.Quantity;
+                    product.Updated = true;
+                }
             }
         }
 
