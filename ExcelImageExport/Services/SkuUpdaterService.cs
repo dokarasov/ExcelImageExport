@@ -40,13 +40,15 @@ namespace ExcelImageExport.Services
                     var row = worksheet.GetRow(rowIndex);
                     try
                     {
+                        var priceCell = row.GetCell(priceColumnIndex).GetFormattedCellValue();
+                        var quantityCell = row.GetCell(quantityColumnIndex).GetFormattedCellValue();
                         list.Add(new SkuItem
                         {
                             Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
-                            Price = double.Parse(
-                                row.GetCell(priceColumnIndex).GetFormattedCellValue().Replace(",", "."),
-                                CultureInfo.InvariantCulture),
-                            Quantity = int.Parse(row.GetCell(quantityColumnIndex).GetFormattedCellValue())
+                            Price = priceCell != null
+                                ? (double?) double.Parse(priceCell.Replace(",", "."), CultureInfo.InvariantCulture)
+                                : null,
+                            Quantity = quantityCell != null ? (int?) int.Parse(quantityCell) : null
                         });
                     }
                     catch (Exception ex)
@@ -120,17 +122,21 @@ namespace ExcelImageExport.Services
 
             foreach (var skuItem in skuList.List)
             {
-                var anyProduct = productsList.List.Any(z => z.Sku == skuItem.Sku);
+                Func<ProductItem, bool> findProductPredicate =
+                    product => product.Sku == skuItem.Sku && (skuItem.Price.HasValue || skuItem.Quantity.HasValue);
+                var anyProduct = productsList.List.Any(findProductPredicate);
                 if (!anyProduct)
                 {
                     skuItem.Unused = true;
                     continue;
                 }
 
-                foreach (var product in productsList.List.Where(z => z.Sku == skuItem.Sku))
+                foreach (var product in productsList.List.Where(findProductPredicate))
                 {
-                    product.Price = skuItem.Price;
-                    product.Quantity = skuItem.Quantity;
+                    if (skuItem.Price.HasValue)
+                        product.Price = skuItem.Price.Value;
+                    if (skuItem.Quantity.HasValue)
+                        product.Quantity = skuItem.Quantity.Value;
                     product.Updated = true;
                 }
             }
@@ -187,10 +193,10 @@ namespace ExcelImageExport.Services
                 skuCell.SetCellValue(product.Sku);
 
                 var priceCell = row.CreateCell(priceColumnIndex);
-                priceCell.SetCellValue(product.Price);
+                priceCell.SetCellValue(product.Price ?? -1);
 
                 var quantityCell = row.CreateCell(quantityColumnIndex);
-                quantityCell.SetCellValue(product.Quantity);
+                quantityCell.SetCellValue(product.Quantity ?? -1);
 
                 rowIndex++;
             }

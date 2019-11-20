@@ -15,6 +15,9 @@ namespace ExcelImageExport.Features
                 case CellType.String:
                     return cell.StringCellValue;
 
+                case CellType.Blank:
+                    return null;
+
                 case CellType.Numeric:
                     if (DateUtil.IsCellDateFormatted(cell))
                     {
