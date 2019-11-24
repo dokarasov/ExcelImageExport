@@ -45,10 +45,10 @@ namespace ExcelImageExport.Services
                         list.Add(new SkuItem
                         {
                             Sku = row.GetCell(skuColumnIndex).GetFormattedCellValue(),
-                            Price = priceCell != null
+                            Price = !string.IsNullOrEmpty(priceCell) 
                                 ? (double?) double.Parse(priceCell.Replace(",", "."), CultureInfo.InvariantCulture)
                                 : null,
-                            Quantity = quantityCell != null ? (int?) int.Parse(quantityCell) : null
+                            Quantity = !string.IsNullOrEmpty(quantityCell) ? (int?) int.Parse(quantityCell) : null
                         });
                     }
                     catch (Exception ex)
